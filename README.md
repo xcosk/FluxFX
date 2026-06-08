@@ -47,6 +47,19 @@ ADMIN_EMAIL="admin@fluxfx.com"
 ADMIN_PASSWORD="admin123"
 ```
 
+Для Vercel укажите в Project Settings -> Environment Variables строку подключения
+к удаленной PostgreSQL базе. Поддерживаются `DATABASE_URL`, `POSTGRES_PRISMA_URL`,
+`POSTGRES_URL_NON_POOLING` и `POSTGRES_URL`. Локальный `localhost` URL на Vercel
+не работает.
+
+Для Vercel в `vercel.json` уже задана build command:
+
+```bash
+npm run vercel-build
+```
+
+Скрипт выполнит `prisma db push`, чтобы создать таблицы перед сборкой.
+
 ## Админ-панель
 
 После `npm run db:seed` создаётся администратор:

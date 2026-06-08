@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthErrorMessage, logApiError } from "@/lib/api-errors";
 import {
   buildSessionUser,
   createToken,
@@ -38,7 +39,11 @@ export async function POST(request: Request) {
     await setSessionCookie(token);
 
     return NextResponse.json({ user: sessionUser });
-  } catch {
-    return NextResponse.json({ error: "Ошибка входа" }, { status: 500 });
+  } catch (error) {
+    logApiError("auth/login", error);
+    return NextResponse.json(
+      { error: getAuthErrorMessage(error) },
+      { status: 500 }
+    );
   }
 }

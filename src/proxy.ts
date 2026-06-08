@@ -7,9 +7,13 @@ const SECRET = new TextEncoder().encode(
 );
 
 const publicPaths = ["/login", "/register"];
-const authApiPaths = ["/api/auth/login", "/api/auth/register"];
+const publicApiPaths = [
+  "/api/auth/login",
+  "/api/auth/register",
+  "/api/health/db",
+];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (
@@ -37,7 +41,7 @@ export async function middleware(request: NextRequest) {
   const isAdmin = payload?.role === "ADMIN";
 
   const isPublic =
-    publicPaths.includes(pathname) || authApiPaths.includes(pathname);
+    publicPaths.includes(pathname) || publicApiPaths.includes(pathname);
 
   if (isBlocked && !isPublic) {
     const response = NextResponse.redirect(new URL("/login", request.url));

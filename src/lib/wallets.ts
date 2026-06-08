@@ -1,5 +1,5 @@
 import { prisma } from "./prisma";
-import { convert, getRates } from "./rates";
+import { getRates } from "./rates";
 
 export interface WalletBalance {
   currency: string;

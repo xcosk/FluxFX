@@ -29,6 +29,18 @@ interface OperatorMsg {
   user: { id: string; name: string; email: string };
 }
 
+async function fetchAdminData() {
+  const [usersRes, msgsRes] = await Promise.all([
+    fetch("/api/admin/users"),
+    fetch("/api/admin/messages"),
+  ]);
+
+  const users = usersRes.ok ? (await usersRes.json()).users : undefined;
+  const messages = msgsRes.ok ? (await msgsRes.json()).messages : undefined;
+
+  return { users, messages };
+}
+
 export default function AdminClient() {
   const [tab, setTab] = useState<"users" | "messages">("users");
   const [users, setUsers] = useState<UserRow[]>([]);
@@ -40,23 +52,28 @@ export default function AdminClient() {
 
   const load = async () => {
     setLoading(true);
-    const [usersRes, msgsRes] = await Promise.all([
-      fetch("/api/admin/users"),
-      fetch("/api/admin/messages"),
-    ]);
-    if (usersRes.ok) {
-      const data = await usersRes.json();
-      setUsers(data.users);
-    }
-    if (msgsRes.ok) {
-      const data = await msgsRes.json();
-      setMessages(data.messages);
-    }
+    const data = await fetchAdminData();
+    if (data.users) setUsers(data.users);
+    if (data.messages) setMessages(data.messages);
     setLoading(false);
   };
 
   useEffect(() => {
-    load();
+    let mounted = true;
+
+    async function loadInitial() {
+      const data = await fetchAdminData();
+      if (!mounted) return;
+      if (data.users) setUsers(data.users);
+      if (data.messages) setMessages(data.messages);
+      setLoading(false);
+    }
+
+    void loadInitial();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const updateUser = async (

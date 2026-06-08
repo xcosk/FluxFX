@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 import { getAuthErrorMessage, logApiError } from "@/lib/api-errors";
 import { prisma } from "@/lib/prisma";
 

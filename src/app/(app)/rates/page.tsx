@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import RatesClient from "@/components/RatesClient";
 import { getSession } from "@/lib/auth";
 import { CURRENCIES } from "@/lib/currencies";

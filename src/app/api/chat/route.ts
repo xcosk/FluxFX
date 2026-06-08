@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 import { getChatResponse } from "@/lib/chatbot";
 
 export async function POST(request: Request) {

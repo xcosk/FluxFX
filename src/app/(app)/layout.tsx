@@ -3,6 +3,8 @@ import Header from "@/components/Header";
 import TickerBar from "@/components/TickerBar";
 import { getSession } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 export default async function AppLayout({
   children,
 }: {

@@ -9,7 +9,7 @@ export function getDatabaseUrl() {
 
   if (!databaseUrl) {
     throw new Error(
-      "Database connection string is missing. Set DATABASE_URL in Vercel Environment Variables."
+      "Database connection string is missing. Set DATABASE_URL (or POSTGRES_URL from Vercel Storage) in Vercel Environment Variables for Production, Preview and Development."
     );
   }
 

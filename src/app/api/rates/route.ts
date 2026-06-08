@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 import { getRates } from "@/lib/rates";
 
 export async function GET() {

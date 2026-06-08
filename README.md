@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FluxFX — Currency Studio
 
-## Getting Started
+Валютная студия на Next.js с живыми курсами, обменом валют, калькулятором поездок и помощником.
 
-First, run the development server:
+## Возможности
+
+- **Авторизация** — вход и регистрация, имя пользователя в приветствии
+- **Кабинет** — баланс, быстрый конвертер, избранные валюты, история обменов
+- **Курсы** — 37 валют с живым обновлением каждые 5 минут
+- **Обмен** — конвертация с сохранением в историю
+- **Поездки** — калькулятор бюджета по городам
+- **Помощник** — ответы на популярные вопросы + связь с оператором
+- **Админ-панель** — управление пользователями, блокировка, смена паролей, сообщения оператору
+- **Мультивалютный баланс** — после обмена валюта появляется на счёте (USD → EUR и т.д.)
+
+## Запуск
+
+### 1. PostgreSQL
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Через Docker
+docker run --name fluxfx-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=fluxfx -p 5432:5432 -d postgres:16
+
+# Или используйте существующий PostgreSQL и обновите DATABASE_URL в .env
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Установка
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npx prisma db push
+npm run db:seed
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Откройте [http://localhost:3000](http://localhost:3000) — сначала появится страница входа/регистрации.
 
-## Learn More
+## Переменные окружения
 
-To learn more about Next.js, take a look at the following resources:
+Скопируйте `.env.example` в `.env`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/fluxfx?schema=public"
+JWT_SECRET="your-secret-key"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+ADMIN_EMAIL="admin@fluxfx.com"
+ADMIN_PASSWORD="admin123"
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Админ-панель
 
-## Deploy on Vercel
+После `npm run db:seed` создаётся администратор:
+- Email: `admin@fluxfx.com`
+- Пароль: `admin123`
+- Панель: `/admin`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+В админке можно:
+- Просматривать всех пользователей и их балансы по валютам
+- Менять пароли
+- Блокировать / разблокировать
+- Читать и отвечать на сообщения оператору
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Стек
+
+- Next.js 16, React 19, Tailwind CSS 4
+- PostgreSQL + Prisma
+- Курсы: open.er-api.com + frankfurter.app
+- JWT-авторизация

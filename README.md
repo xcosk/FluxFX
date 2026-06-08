@@ -73,6 +73,25 @@ npm run vercel-build
 - Блокировать / разблокировать
 - Читать и отвечать на сообщения оператору
 
+## Деплой на Vercel
+
+1. Создай **Vercel Postgres** (Storage → Postgres) или подключи Neon/Supabase
+2. В **Environment Variables** добавь:
+   - `DATABASE_URL` — возьми `POSTGRES_URL` из Vercel Storage (или pooled URL)
+   - `JWT_SECRET` — случайная строка
+   - `ADMIN_EMAIL`, `ADMIN_PASSWORD`
+3. Один раз примени схему к прод-базе (с локального компьютера):
+
+```bash
+# Скопируй POSTGRES_URL_NON_POOLING из Vercel → .env
+npx prisma db push
+npm run db:seed
+```
+
+4. Задеплой проект — сборка использует только `prisma generate && next build`
+
+> Если снова видишь `P1011 TLS` — убедись, что в `DATABASE_URL` есть `?sslmode=require`
+
 ## Стек
 
 - Next.js 16, React 19, Tailwind CSS 4

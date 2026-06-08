@@ -1,20 +1,10 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
 import { PrismaClient } from "../src/generated/prisma/client";
+import { createPgPool } from "../src/lib/db";
 import bcrypt from "bcryptjs";
 
-const databaseUrl =
-  process.env.DATABASE_URL ||
-  process.env.POSTGRES_PRISMA_URL ||
-  process.env.POSTGRES_URL_NON_POOLING ||
-  process.env.POSTGRES_URL;
-
-if (!databaseUrl) {
-  throw new Error("Database connection string is missing.");
-}
-
-const pool = new Pool({ connectionString: databaseUrl });
+const pool = createPgPool();
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
